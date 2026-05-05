@@ -227,6 +227,44 @@
   </svg>
 </main>
 
+<!-- ── WELCOME MODAL ───────────────────────────────────────── -->
+<div class="modal-overlay" id="welcomeOverlay">
+  <div class="modal welcome-modal" id="welcomeModal">
+    <div class="welcome-header">
+      <div class="welcome-icon">🏙️</div>
+      <h2 class="welcome-title">Добро пожаловать в<br><span>Город решений</span></h2>
+    </div>
+    <div class="welcome-body">
+      <div class="welcome-section">
+        <div class="welcome-section-icon">🎯</div>
+        <div>
+          <h3>Что это такое?</h3>
+          <p>Интерактивная игра, которая помогает выявить твои <strong>когнитивные искажения</strong> — скрытые шаблоны мышления, влияющие на решения в повседневной жизни.</p>
+        </div>
+      </div>
+      <div class="welcome-section">
+        <div class="welcome-section-icon">🧠</div>
+        <div>
+          <h3>Что проверяет игра?</h3>
+          <p>60 реальных ситуаций из 6 районов города: финансы, покупки, общение, неопределённость, мышление и время. По итогам ты получишь персональный профиль своих когнитивных искажений.</p>
+        </div>
+      </div>
+      <div class="welcome-section">
+        <div class="welcome-section-icon">💬</div>
+        <div>
+          <h3>Как играть?</h3>
+          <p>Кликай на районы карты и отвечай на вопросы. Выбирай тот вариант, который <strong>наиболее честно</strong> отражает твою реальную реакцию — не «правильный», а твой.</p>
+        </div>
+      </div>
+      <div class="welcome-honest-box">
+        <span class="welcome-honest-icon">✨</span>
+        <p>Нет правильных или неправильных ответов. Чем честнее ты отвечаешь, тем точнее результат — и тем полезнее он будет именно для тебя.</p>
+      </div>
+    </div>
+    <button class="welcome-btn" id="welcomeStartBtn">Начать исследование →</button>
+  </div>
+</div>
+
 <!-- ── DISTRICT MODAL ──────────────────────────────────────── -->
 <div class="modal-overlay hidden" id="modalOverlay">
   <div class="modal" id="districtModal">
@@ -266,5 +304,12 @@
 <script src="js/data.js"></script>
 <script src="js/game.js"></script>
 <script src="js/ui.js"></script>
+<script>
+  document.getElementById('welcomeStartBtn').addEventListener('click', function () {
+    const overlay = document.getElementById('welcomeOverlay');
+    overlay.style.animation = 'welcomeFadeOut 0.35s ease forwards';
+    setTimeout(() => overlay.remove(), 350);
+  });
+</script>
 </body>
 </html>
