@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Город решений</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- ── HEADER ─────────────────────────────────────────────── -->
+<header class="header">
+  <h1 class="logo">🏙️ Город решений</h1>
+  <div class="progress-container">
+    <div class="progress-bar">
+      <div class="progress-fill" id="progressFill" style="width:0%"></div>
+    </div>
+    <span class="progress-text" id="progressText">0 / 60</span>
+  </div>
+  <div class="header-actions">
+    <button class="result-btn hidden" id="resultBtn">📊 Результат</button>
+    <button class="reset-btn" id="resetBtn">↺ Сброс</button>
+  </div>
+</header>
+
+<!-- ── MAP ────────────────────────────────────────────────── -->
+<main class="map-container">
+  <svg class="city-map" id="cityMap" viewBox="0 0 960 620"
+       xmlns="http://www.w3.org/2000/svg">
+
+    <!-- Sky background -->
+    <defs>
+      <radialGradient id="skyGrad" cx="50%" cy="30%" r="70%">
+        <stop offset="0%"   stop-color="#1e1b4b"/>
+        <stop offset="100%" stop-color="#0f0f1a"/>
+      </radialGradient>
+      <filter id="glow">
+        <feGaussianBlur stdDeviation="4" result="blur"/>
+        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+      <filter id="glow2">
+        <feGaussianBlur stdDeviation="8" result="blur"/>
+        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+
+      <!-- District clip masks -->
+      <clipPath id="clip-finance">   <polygon points="30,30 330,30 330,220 30,220"/></clipPath>
+      <clipPath id="clip-shopping">  <polygon points="340,30 640,30 640,220 340,220"/></clipPath>
+      <clipPath id="clip-social">    <polygon points="650,30 930,30 930,220 650,220"/></clipPath>
+      <clipPath id="clip-uncertainty"><polygon points="30,240 320,240 320,430 30,430"/></clipPath>
+      <clipPath id="clip-cognitive"> <polygon points="330,240 640,240 640,430 330,430"/></clipPath>
+      <clipPath id="clip-time">      <polygon points="650,240 930,240 930,430 650,430"/></clipPath>
+    </defs>
+
+    <image href="assets/map.png" width="960" height="620" preserveAspectRatio="xMidYMid meet"/>
+
+    <!-- Stars -->
+    <g opacity="0.5">
+      <circle cx="60"  cy="15" r="1" fill="#fff"/>
+      <circle cx="200" cy="8"  r="1.5" fill="#fff"/>
+      <circle cx="400" cy="12" r="1" fill="#fff"/>
+      <circle cx="700" cy="6"  r="1.5" fill="#fff"/>
+      <circle cx="850" cy="18" r="1" fill="#fff"/>
+      <circle cx="920" cy="10" r="1" fill="#fff"/>
+    </g>
+
+
+    <!-- ────────────────────────────────────────────────────
+         DISTRICT 1: ФИНАНСОВЫЙ (top-left)
+         ──────────────────────────────────────────────────── -->
+    <g class="district-zone" data-district="finance"
+       onclick="UI.openDistrict('finance')">
+      <!-- Base fill -->
+      <polygon points="30,30 330,30 330,222 30,222"
+               fill="transparent" rx="12"/>
+      <!-- Hover overlay -->
+      <polygon class="district-overlay" points="30,30 330,30 330,222 30,222"
+               fill="rgba(59,130,246,0.2)" filter="url(#glow)"/>
+      <!-- Border -->
+      <polygon points="30,30 330,30 330,222 30,222"
+               fill="none" stroke="#3b82f6" stroke-width="1.5" stroke-linejoin="round"
+               rx="12"/>
+
+      <!-- Progress badge -->
+      <rect x="140" y="186" width="80" height="22" rx="11" fill="#3b82f6" opacity="0.9"/>
+      <text class="district-badge" x="180" y="201" text-anchor="middle"
+            data-district-badge="finance">0/10</text>
+    </g>
+
+    <!-- ────────────────────────────────────────────────────
+         DISTRICT 2: ТОРГОВЫЙ (top-center)
+         ──────────────────────────────────────────────────── -->
+    <g class="district-zone" data-district="shopping"
+       onclick="UI.openDistrict('shopping')">
+      <polygon points="347,30 640,30 640,222 347,222"
+               fill="transparent"/>
+      <polygon class="district-overlay" points="347,30 640,30 640,222 347,222"
+               fill="rgba(245,158,11,0.2)" filter="url(#glow)"/>
+      <polygon points="347,30 640,30 640,222 347,222"
+               fill="none" stroke="#f59e0b" stroke-width="1.5"/>
+
+      <rect x="454" y="186" width="80" height="22" rx="11" fill="#f59e0b" opacity="0.9"/>
+      <text class="district-badge" x="494" y="201" text-anchor="middle"
+            data-district-badge="shopping">0/10</text>
+    </g>
+
+    <!-- ────────────────────────────────────────────────────
+         DISTRICT 3: СОЦИАЛЬНЫЙ (top-right)
+         ──────────────────────────────────────────────────── -->
+    <g class="district-zone" data-district="social"
+       onclick="UI.openDistrict('social')">
+      <polygon points="657,30 930,30 930,222 657,222"
+               fill="transparent"/>
+      <polygon class="district-overlay" points="657,30 930,30 930,222 657,222"
+               fill="rgba(139,92,246,0.2)" filter="url(#glow)"/>
+      <polygon points="657,30 930,30 930,222 657,222"
+               fill="none" stroke="#8b5cf6" stroke-width="1.5"/>
+
+      <rect x="753" y="186" width="80" height="22" rx="11" fill="#8b5cf6" opacity="0.9"/>
+      <text class="district-badge" x="793" y="201" text-anchor="middle"
+            data-district-badge="social">0/10</text>
+    </g>
+
+    <!-- ────────────────────────────────────────────────────
+         DISTRICT 4: НЕОПРЕДЕЛЁННОСТЬ (mid-left)
+         ──────────────────────────────────────────────────── -->
+    <g class="district-zone" data-district="uncertainty"
+       onclick="UI.openDistrict('uncertainty')">
+      <polygon points="30,239 330,239 330,432 30,432"
+               fill="transparent"/>
+      <polygon class="district-overlay" points="30,239 330,239 330,432 30,432"
+               fill="rgba(239,68,68,0.2)" filter="url(#glow)"/>
+      <polygon points="30,239 330,239 330,432 30,432"
+               fill="none" stroke="#ef4444" stroke-width="1.5"/>
+
+      <rect x="140" y="400" width="80" height="22" rx="11" fill="#ef4444" opacity="0.9"/>
+      <text class="district-badge" x="180" y="415" text-anchor="middle"
+            data-district-badge="uncertainty">0/10</text>
+    </g>
+
+    <!-- ────────────────────────────────────────────────────
+         DISTRICT 5: КОГНИТИВНЫЙ (mid-center)
+         ──────────────────────────────────────────────────── -->
+    <g class="district-zone" data-district="cognitive"
+       onclick="UI.openDistrict('cognitive')">
+      <polygon points="347,239 640,239 640,432 347,432"
+               fill="transparent"/>
+      <polygon class="district-overlay" points="347,239 640,239 640,432 347,432"
+               fill="rgba(16,185,129,0.2)" filter="url(#glow)"/>
+      <polygon points="347,239 640,239 640,432 347,432"
+               fill="none" stroke="#10b981" stroke-width="1.5"/>
+
+      <rect x="454" y="400" width="80" height="22" rx="11" fill="#10b981" opacity="0.9"/>
+      <text class="district-badge" x="494" y="415" text-anchor="middle"
+            data-district-badge="cognitive">0/10</text>
+    </g>
+
+    <!-- ────────────────────────────────────────────────────
+         DISTRICT 6: ВРЕМЯ (mid-right)
+         ──────────────────────────────────────────────────── -->
+    <g class="district-zone" data-district="time"
+       onclick="UI.openDistrict('time')">
+      <polygon points="657,239 930,239 930,432 657,432"
+               fill="transparent"/>
+      <polygon class="district-overlay" points="657,239 930,239 930,432 657,432"
+               fill="rgba(107,114,128,0.2)" filter="url(#glow)"/>
+      <polygon points="657,239 930,239 930,432 657,432"
+               fill="none" stroke="#9ca3af" stroke-width="1.5"/>
+
+      <rect x="753" y="400" width="80" height="22" rx="11" fill="#6b7280" opacity="0.9"/>
+      <text class="district-badge" x="793" y="415" text-anchor="middle"
+            data-district-badge="time">0/10</text>
+    </g>
+
+    <!-- ── BOTTOM LEGEND ─────────────────────────────────── -->
+    <rect x="0" y="449" width="960" height="171" fill="#0a0a14"/>
+
+    <text x="480" y="488" text-anchor="middle"
+          font-family="'Segoe UI', sans-serif" font-size="16" font-weight="700"
+          fill="rgba(255,255,255,0.9)">
+      Кликни на район, чтобы начать
+    </text>
+    <text x="480" y="510" text-anchor="middle"
+          font-family="'Segoe UI', sans-serif" font-size="12"
+          fill="rgba(255,255,255,0.45)">
+      60 ситуаций · 8 когнитивных искажений · Исследуй свой разум
+    </text>
+
+    <!-- District legend icons row -->
+    <g font-family="'Segoe UI', sans-serif">
+      <!-- Finance -->
+      <rect x="60"  y="530" width="130" height="70" rx="12" fill="#1e3a5f" stroke="#3b82f6" stroke-width="1" opacity="0.8"/>
+      <text x="125" y="558" text-anchor="middle" font-size="20">💰</text>
+      <text x="125" y="576" text-anchor="middle" font-size="10" fill="#93c5fd">Финансовый</text>
+      <text x="125" y="590" text-anchor="middle" font-size="9"  fill="#60a5fa" opacity="0.7">10 вопросов</text>
+
+      <!-- Shopping -->
+      <rect x="205" y="530" width="130" height="70" rx="12" fill="#3d2000" stroke="#f59e0b" stroke-width="1" opacity="0.8"/>
+      <text x="270" y="558" text-anchor="middle" font-size="20">🛍️</text>
+      <text x="270" y="576" text-anchor="middle" font-size="10" fill="#fcd34d">Торговый</text>
+      <text x="270" y="590" text-anchor="middle" font-size="9"  fill="#fbbf24" opacity="0.7">10 вопросов</text>
+
+      <!-- Social -->
+      <rect x="350" y="530" width="130" height="70" rx="12" fill="#2e1a47" stroke="#8b5cf6" stroke-width="1" opacity="0.8"/>
+      <text x="415" y="558" text-anchor="middle" font-size="20">👥</text>
+      <text x="415" y="576" text-anchor="middle" font-size="10" fill="#c4b5fd">Социальный</text>
+      <text x="415" y="590" text-anchor="middle" font-size="9"  fill="#a78bfa" opacity="0.7">10 вопросов</text>
+
+      <!-- Uncertainty -->
+      <rect x="495" y="530" width="130" height="70" rx="12" fill="#3b0000" stroke="#ef4444" stroke-width="1" opacity="0.8"/>
+      <text x="560" y="558" text-anchor="middle" font-size="20">🎲</text>
+      <text x="560" y="576" text-anchor="middle" font-size="10" fill="#fca5a5">Неопред-ть</text>
+      <text x="560" y="590" text-anchor="middle" font-size="9"  fill="#f87171" opacity="0.7">10 вопросов</text>
+
+      <!-- Cognitive -->
+      <rect x="640" y="530" width="130" height="70" rx="12" fill="#052e16" stroke="#10b981" stroke-width="1" opacity="0.8"/>
+      <text x="705" y="558" text-anchor="middle" font-size="20">🧠</text>
+      <text x="705" y="576" text-anchor="middle" font-size="10" fill="#6ee7b7">Когнитивный</text>
+      <text x="705" y="590" text-anchor="middle" font-size="9"  fill="#34d399" opacity="0.7">10 вопросов</text>
+
+      <!-- Time -->
+      <rect x="785" y="530" width="130" height="70" rx="12" fill="#1c1917" stroke="#9ca3af" stroke-width="1" opacity="0.8"/>
+      <text x="850" y="558" text-anchor="middle" font-size="20">⏳</text>
+      <text x="850" y="576" text-anchor="middle" font-size="10" fill="#d1d5db">Время</text>
+      <text x="850" y="590" text-anchor="middle" font-size="9"  fill="#9ca3af" opacity="0.7">10 вопросов</text>
+    </g>
+  </svg>
+</main>
+
+<!-- ── WELCOME MODAL ───────────────────────────────────────── -->
+<div class="modal-overlay" id="welcomeOverlay">
+  <div class="modal welcome-modal" id="welcomeModal">
+    <button class="welcome-close-btn" id="welcomeCloseBtn" title="Закрыть">✕</button>
+    <div class="welcome-header">
+      <div class="welcome-icon">🏙️</div>
+      <h2 class="welcome-title">Добро пожаловать в<br><span>Город решений</span></h2>
+    </div>
+    <div class="welcome-body">
+      <div class="welcome-section">
+        <div class="welcome-section-icon">🎯</div>
+        <div>
+          <h3>Что это такое?</h3>
+          <p>Интерактивная игра, которая помогает выявить твои <strong>когнитивные искажения</strong> — скрытые шаблоны мышления, влияющие на решения в повседневной жизни.</p>
+        </div>
+      </div>
+      <div class="welcome-section">
+        <div class="welcome-section-icon">🧠</div>
+        <div>
+          <h3>Что проверяет игра?</h3>
+          <p>60 реальных ситуаций из 6 районов города: финансы, покупки, общение, неопределённость, мышление и время. По итогам ты получишь персональный профиль своих когнитивных искажений.</p>
+        </div>
+      </div>
+      <div class="welcome-section">
+        <div class="welcome-section-icon">💬</div>
+        <div>
+          <h3>Как играть?</h3>
+          <p>Кликай на районы карты и отвечай на вопросы. Выбирай тот вариант, который <strong>наиболее честно</strong> отражает твою реальную реакцию — не «правильный», а твой.</p>
+        </div>
+      </div>
+      <div class="welcome-honest-box">
+        <span class="welcome-honest-icon">✨</span>
+        <p>Нет правильных или неправильных ответов. Чем честнее ты отвечаешь, тем точнее результат — и тем полезнее он будет именно для тебя.</p>
+      </div>
+    </div>
+    <button class="welcome-btn" id="welcomeStartBtn">Начать исследование →</button>
+  </div>
+</div>
+
+<!-- ── DISTRICT MODAL ──────────────────────────────────────── -->
+<div class="modal-overlay hidden" id="modalOverlay">
+  <div class="modal" id="districtModal">
+    <div class="modal-header">
+      <h2 class="modal-title" id="modalTitle">Район</h2>
+      <span class="modal-counter" id="questionCounter">1 / 10</span>
+    </div>
+    <div class="modal-body">
+      <p class="question-text" id="questionText"></p>
+      <div class="options-container" id="optionsContainer"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="nav-btn" id="btnBack">← Назад</button>
+      <button class="nav-btn" id="btnForward">Вперёд →</button>
+      <button class="map-btn" id="btnMap">🗺️ На карту</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── RESULT SCREEN ───────────────────────────────────────── -->
+<div class="result-screen hidden" id="resultScreen">
+  <h2>📊 Результаты</h2>
+  <p class="result-subtitle">Ты ответил на все 60 вопросов. Вот профиль твоих когнитивных искажений:</p>
+
+  <div class="top-bias-box" id="topBiasText"></div>
+
+  <div class="radar-wrap">
+    <svg class="radar-svg" id="radarCanvas" viewBox="0 0 400 400"
+         xmlns="http://www.w3.org/2000/svg"></svg>
+  </div>
+
+  <div class="bias-results" id="biasResults"></div>
+
+  <button class="back-map-btn" id="btnBackToMap">← Вернуться на карту</button>
+</div>
+
+<script src="js/data.js"></script>
+<script src="js/game.js"></script>
+<script src="js/ui.js"></script>
+<script>
+  function closeWelcome() {
+    const overlay = document.getElementById('welcomeOverlay');
+    overlay.style.animation = 'welcomeFadeOut 0.35s ease forwards';
+    setTimeout(() => overlay.remove(), 350);
+  }
+  document.getElementById('welcomeStartBtn').addEventListener('click', closeWelcome);
+  document.getElementById('welcomeCloseBtn').addEventListener('click', closeWelcome);
+</script>
+</body>
+</html>
