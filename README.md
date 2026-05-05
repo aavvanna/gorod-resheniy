@@ -2,28 +2,6 @@
 
 Веб-игра для исследования когнитивных искажений.
 
-## 🚀 Быстрый старт
-
-### Запуск локально
-Просто откройте `index.html` в браузере — никакого сервера не нужно.
-
-### Деплой на GitHub Pages
-
-1. Создайте новый репозиторий на GitHub (например, `gorod-resheniy`)
-2. Загрузите все файлы в репозиторий:
-   ```bash
-   git init
-   git add .
-   git commit -m "Initial commit"
-   git branch -M main
-   git remote add origin https://github.com/ВАШ_НИК/gorod-resheniy.git
-   git push -u origin main
-   ```
-3. Перейдите в **Settings → Pages**
-4. Source: **Deploy from a branch**, ветка: **main**, папка: **/ (root)**
-5. Сохраните — через 1-2 минуты сайт будет доступен по адресу:
-   `https://ВАШ_НИК.github.io/gorod-resheniy/`
-
 ## 📁 Структура файлов
 
 ```
