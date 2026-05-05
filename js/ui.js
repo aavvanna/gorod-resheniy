@@ -19,7 +19,41 @@ const UI = (() => {
       $('resultBtn').classList.remove('hidden');
     }
   }
+  async function sendToSheets(answers) {
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx1ghZT5VkTSM1TK8bh2hCplAnHNST7tmRysqt0YnKeHhkqP0bfyPCmkN1rzb5nw6YJPA/exec';
 
+    // Формируем объект q1..q60 из твоего формата ответов
+    const formatted = {};
+    Object.entries(answers).forEach(([questionId, optionId]) => {
+      // questionId у тебя выглядит как "fin_1", "shop_3" и т.д.
+      // можно хранить как есть, или маппить в q1..q60
+      formatted[questionId] = optionId;
+    });
+
+    try {
+      await fetch(APPS_SCRIPT_URL, {
+        method: 'POST',
+        // Apps Script требует text/plain из-за CORS preflight
+        headers: { 'Content-Type': 'text/plain' },
+        body: JSON.stringify({
+          session_id: getSessionId(),
+          answers: formatted
+        })
+      });
+    } catch (err) {
+      console.warn('Не удалось отправить в Sheets:', err);
+      // Не блокируем пользователя — тихая ошибка
+    }
+  }
+
+  function getSessionId() {
+    let id = localStorage.getItem('session_id');
+    if (!id) {
+      id = Date.now() + '_' + Math.random().toString(36).slice(2, 7);
+      localStorage.setItem('session_id', id);
+    }
+    return id;
+  }
   // ── Progress bar ─────────────────────────────────────────
   function renderProgress() {
     const answered = Game.getAnsweredCount();
@@ -149,6 +183,7 @@ const UI = (() => {
   // ── Result screen ─────────────────────────────────────────
   function showResults() {
     const scores = Game.computeScores();
+    sendToSheets(Game.getState().answers);
     const screen = $('resultScreen');
 
     // Build bias cards
