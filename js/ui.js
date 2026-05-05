@@ -20,7 +20,7 @@ const UI = (() => {
     }
   }
   async function sendToSheets(answers) {
-    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx1ghZT5VkTSM1TK8bh2hCplAnHNST7tmRysqt0YnKeHhkqP0bfyPCmkN1rzb5nw6YJPA/exec';
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw-7swIU5sXVTJvo6wnAve7nE-AzjZFqW270R1hej8GVMEUbE1Iw6yiQQ2J-SzQ_3dFcw/exec';
 
     // Формируем объект q1..q60 из твоего формата ответов
     const formatted = {};
