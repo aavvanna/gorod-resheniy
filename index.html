@@ -230,6 +230,7 @@
 <!-- ── WELCOME MODAL ───────────────────────────────────────── -->
 <div class="modal-overlay" id="welcomeOverlay">
   <div class="modal welcome-modal" id="welcomeModal">
+    <button class="welcome-close-btn" id="welcomeCloseBtn" title="Закрыть">✕</button>
     <div class="welcome-header">
       <div class="welcome-icon">🏙️</div>
       <h2 class="welcome-title">Добро пожаловать в<br><span>Город решений</span></h2>
@@ -305,11 +306,13 @@
 <script src="js/game.js"></script>
 <script src="js/ui.js"></script>
 <script>
-  document.getElementById('welcomeStartBtn').addEventListener('click', function () {
+  function closeWelcome() {
     const overlay = document.getElementById('welcomeOverlay');
     overlay.style.animation = 'welcomeFadeOut 0.35s ease forwards';
     setTimeout(() => overlay.remove(), 350);
-  });
+  }
+  document.getElementById('welcomeStartBtn').addEventListener('click', closeWelcome);
+  document.getElementById('welcomeCloseBtn').addEventListener('click', closeWelcome);
 </script>
 </body>
 </html>
